@@ -50,12 +50,24 @@ func SearchItems(query string) {
 		yearInfo := s.Find(".hidden-md .format").Text()
 		year := strings.Join(r.FindAllString(yearInfo, -1), "")
 
+		available := s.Find(".availability_block .availability").Text()
+
+		icon := "books.png"
+
+		if strings.Index(available, "Available") > 0 {
+			icon = "available.png"
+		}
+
+		if strings.Index(available, "All copies in use") > 0 {
+			icon = "not_available.png"
+		}
+
 		if len(subtitle) == 0 {
 			subtitle = title
 		}
 
 		if len(title) > 0 {
-			item := AlfredItem{Title: fmt.Sprintf("[%s]-%s", string(year), title), Arg: fmt.Sprintf("https://smcl.bibliocommons.com%s", href), Subtitle: trimTrim(subtitle), Icon: "books.png"}
+			item := AlfredItem{Title: fmt.Sprintf("[%s]-%s", string(year), title), Arg: fmt.Sprintf("https://smcl.bibliocommons.com%s", href), Subtitle: trimTrim(subtitle), Icon: icon}
 			alfredItems.Items = append(alfredItems.Items, item)
 		}
 	})
